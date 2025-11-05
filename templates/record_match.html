@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Record Match - Esports Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="bi bi-controller"></i> Record Match Result</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> 
+                    <strong>Note:</strong> This form uses a stored procedure to record match results and automatically update team scores.
+                </div>
+                
+                <form method="POST" action="{{ url_for('record_match') }}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="tournament_id" class="form-label">Tournament *</label>
+                            <select class="form-select" id="tournament_id" name="tournament_id" required>
+                                <option value="">-- Select tournament --</option>
+                                {% for tournament in tournaments %}
+                                <option value="{{ tournament.tournament_id }}">
+                                    {{ tournament.name }} ({{ tournament.start_date }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="round_number" class="form-label">Round Number *</label>
+                            <input type="number" class="form-control" id="round_number" name="round_number" 
+                                   min="1" value="1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="team1_id" class="form-label">Team 1 *</label>
+                            <select class="form-select" id="team1_id" name="team1_id" required>
+                                <option value="">-- Select team 1 --</option>
+                                {% for team in teams %}
+                                <option value="{{ team.team_id }}">{{ team.team_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="team2_id" class="form-label">Team 2 *</label>
+                            <select class="form-select" id="team2_id" name="team2_id" required>
+                                <option value="">-- Select team 2 --</option>
+                                {% for team in teams %}
+                                <option value="{{ team.team_id }}">{{ team.team_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="team1_score" class="form-label">Team 1 Score *</label>
+                            <input type="number" class="form-control" id="team1_score" name="team1_score" 
+                                   min="0" required placeholder="0">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="team2_score" class="form-label">Team 2 Score *</label>
+                            <input type="number" class="form-control" id="team2_score" name="team2_score" 
+                                   min="0" required placeholder="0">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="match_time" class="form-label">Match Date & Time *</label>
+                        <input type="datetime-local" class="form-control" id="match_time" name="match_time" required>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        <strong>Important:</strong> 
+                        <ul class="mb-0 mt-2">
+                            <li>Teams must be different</li>
+                            <li>Winner is automatically determined based on scores</li>
+                            <li>If scores are equal, match will be marked as a draw</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="bi bi-check-circle"></i> Record Match
+                        </button>
+                        <a href="{{ url_for('view_matches') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Matches
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

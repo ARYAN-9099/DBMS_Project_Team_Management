@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}{{ team.team_name }} - Team Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-people-fill"></i> {{ team.team_name }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Captain:</strong> {{ team.captain_name }}</p>
+                        <p><strong>Created:</strong> {{ team.created_at.strftime('%Y-%m-%d') }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Total Players:</strong> {{ roster|length }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Roster -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Team Roster</h5>
+            </div>
+            <div class="card-body">
+                {% if roster %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Game Tag</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in roster %}
+                            <tr>
+                                <td>{{ player.name }}</td>
+                                <td>{{ player.email }}</td>
+                                <td><code>{{ player.game_tag }}</code></td>
+                                <td>{{ player.joined_at.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center my-3">No players in this team yet</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Tournament History -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Tournament History</h5>
+            </div>
+            <div class="card-body">
+                {% if tournaments %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tournament</th>
+                                <th>Game</th>
+                                <th>Dates</th>
+                                <th>Matches</th>
+                                <th>Wins</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in tournaments %}
+                            <tr>
+                                <td>{{ t.name }}</td>
+                                <td><span class="badge bg-secondary">{{ t.game }}</span></td>
+                                <td>
+                                    <small>{{ t.start_date }} to {{ t.end_date }}</small>
+                                </td>
+                                <td>{{ t.matches_played }}</td>
+                                <td><span class="badge bg-success">{{ t.wins }}</span></td>
+                                <td>
+                                    <a href="{{ url_for('leaderboard', tournament_id=t.tournament_id) }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        View Leaderboard
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center my-3">No tournament participation yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Sidebar -->
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="bi bi-graph-up"></i> Statistics</h5>
+            </div>
+            <div class="card-body">
+                {% if stats %}
+                <div class="stat-item mb-3">
+                    <h6 class="text-muted">Total Matches</h6>
+                    <h3 class="mb-0">{{ stats.total_matches }}</h3>
+                </div>
+                <hr>
+                <div class="stat-item mb-3">
+                    <h6 class="text-muted">Wins</h6>
+                    <h3 class="mb-0 text-success">{{ stats.wins }}</h3>
+                </div>
+                <hr>
+                <div class="stat-item mb-3">
+                    <h6 class="text-muted">Losses</h6>
+                    <h3 class="mb-0 text-danger">{{ stats.losses }}</h3>
+                </div>
+                <hr>
+                <div class="stat-item mb-3">
+                    <h6 class="text-muted">Draws</h6>
+                    <h3 class="mb-0 text-warning">{{ stats.draws }}</h3>
+                </div>
+                <hr>
+                <div class="stat-item">
+                    <h6 class="text-muted">Win Rate</h6>
+                    <h3 class="mb-0 text-info">{{ stats.win_rate_percentage }}%</h3>
+                    <div class="progress mt-2">
+                        <div class="progress-bar bg-info" role="progressbar" 
+                             style="width: {{ stats.win_rate_percentage }}%">
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No statistics available</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="d-grid gap-2">
+            <a href="{{ url_for('view_teams') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to All Teams
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

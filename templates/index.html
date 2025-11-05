@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Esports Management{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center py-5 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
+    <h1 class="display-4"><i class="bi bi-trophy-fill"></i> Esports Management System</h1>
+    <p class="lead">Organize Tournaments • Manage Teams • Track Performance</p>
+    {% if not session.user_id %}
+    <div class="mt-4">
+        <a href="{{ url_for('register_user') }}" class="btn btn-light btn-lg me-2">Get Started</a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">Login</a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="row">
+    <!-- Upcoming Tournaments -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Upcoming Tournaments</h5>
+            </div>
+            <div class="card-body">
+                {% if upcoming %}
+                <div class="list-group list-group-flush">
+                    {% for tournament in upcoming %}
+                    <a href="{{ url_for('leaderboard', tournament_id=tournament.tournament_id) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ tournament.name }}</h6>
+                            <small class="text-muted">{{ tournament.game }}</small>
+                        </div>
+                        <small>
+                            <i class="bi bi-calendar3"></i> {{ tournament.start_date }} to {{ tournament.end_date }}
+                        </small>
+                        <br>
+                        <small class="text-success">
+                            <i class="bi bi-currency-dollar"></i> Prize Pool: ${{ "{:,.2f}".format(tournament.prize_pool) }}
+                        </small>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center my-4">No upcoming tournaments</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Ongoing Tournaments -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-broadcast"></i> Live Tournaments</h5>
+            </div>
+            <div class="card-body">
+                {% if ongoing %}
+                <div class="list-group list-group-flush">
+                    {% for tournament in ongoing %}
+                    <a href="{{ url_for('leaderboard', tournament_id=tournament.tournament_id) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ tournament.name }} <span class="badge bg-danger">LIVE</span></h6>
+                            <small class="text-muted">{{ tournament.game }}</small>
+                        </div>
+                        <small>
+                            <i class="bi bi-calendar3"></i> {{ tournament.start_date }} to {{ tournament.end_date }}
+                        </small>
+                        <br>
+                        <small class="text-success">
+                            <i class="bi bi-currency-dollar"></i> Prize Pool: ${{ "{:,.2f}".format(tournament.prize_pool) }}
+                        </small>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center my-4">No ongoing tournaments</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Teams -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="bi bi-star-fill"></i> Top Performing Teams</h5>
+            </div>
+            <div class="card-body">
+                {% if top_teams %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Team Name</th>
+                                <th>Total Wins</th>
+                                <th>Avg Score</th>
+                                <th>Win Rate</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for team in top_teams %}
+                            <tr>
+                                <td>
+                                    {% if loop.index == 1 %}
+                                    <i class="bi bi-trophy-fill text-warning"></i>
+                                    {% elif loop.index == 2 %}
+                                    <i class="bi bi-trophy-fill" style="color: silver;"></i>
+                                    {% elif loop.index == 3 %}
+                                    <i class="bi bi-trophy-fill" style="color: #CD7F32;"></i>
+                                    {% else %}
+                                    {{ loop.index }}
+                                    {% endif %}
+                                </td>
+                                <td><strong>{{ team.team_name }}</strong></td>
+                                <td>{{ team.total_wins }}</td>
+                                <td>{{ team.avg_score_all_time }}</td>
+                                <td>
+                                    <span class="badge bg-info">{{ team.overall_win_rate }}%</span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('team_details', team_id=team.team_id) }}" class="btn btn-sm btn-outline-primary">
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center my-4">No team statistics available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+{% if session.user_id %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-lightning-fill"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="{{ url_for('create_team') }}" class="btn btn-outline-primary btn-lg w-100">
+                            <i class="bi bi-people-fill d-block fs-1"></i>
+                            Create Team
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="{{ url_for('create_tournament') }}" class="btn btn-outline-success btn-lg w-100">
+                            <i class="bi bi-calendar-event d-block fs-1"></i>
+                            Create Tournament
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="{{ url_for('register_team') }}" class="btn btn-outline-warning btn-lg w-100">
+                            <i class="bi bi-pencil-square d-block fs-1"></i>
+                            Register Team
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="{{ url_for('record_match') }}" class="btn btn-outline-danger btn-lg w-100">
+                            <i class="bi bi-controller d-block fs-1"></i>
+                            Record Match
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

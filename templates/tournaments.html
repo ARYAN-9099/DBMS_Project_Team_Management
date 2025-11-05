@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Tournaments - Esports Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-calendar-event"></i> Tournaments</h2>
+    {% if session.user_id %}
+    <div>
+        <a href="{{ url_for('create_tournament') }}" class="btn btn-primary me-2">
+            <i class="bi bi-plus-circle"></i> Create Tournament
+        </a>
+        <a href="{{ url_for('register_team') }}" class="btn btn-warning">
+            <i class="bi bi-pencil-square"></i> Register Team
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Ongoing Tournaments -->
+<div class="card shadow mb-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-broadcast"></i> Live Tournaments</h5>
+    </div>
+    <div class="card-body">
+        {% if ongoing %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tournament Name</th>
+                        <th>Game</th>
+                        <th>Dates</th>
+                        <th>Prize Pool</th>
+                        <th>Teams</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in ongoing %}
+                    <tr>
+                        <td>
+                            <strong>{{ t.name }}</strong>
+                            <span class="badge bg-danger ms-2">LIVE</span>
+                        </td>
+                        <td><span class="badge bg-secondary">{{ t.game }}</span></td>
+                        <td>
+                            <small>{{ t.start_date }} <br> to {{ t.end_date }}</small>
+                        </td>
+                        <td class="text-success">
+                            <strong>${{ "{:,.2f}".format(t.prize_pool) }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ t.team_count }} teams</span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('leaderboard', tournament_id=t.tournament_id) }}" 
+                               class="btn btn-sm btn-primary">
+                                <i class="bi bi-trophy"></i> Leaderboard
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center my-3">No ongoing tournaments</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Upcoming Tournaments -->
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-calendar3"></i> Upcoming Tournaments</h5>
+    </div>
+    <div class="card-body">
+        {% if upcoming %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tournament Name</th>
+                        <th>Game</th>
+                        <th>Dates</th>
+                        <th>Prize Pool</th>
+                        <th>Teams</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in upcoming %}
+                    <tr>
+                        <td><strong>{{ t.name }}</strong></td>
+                        <td><span class="badge bg-secondary">{{ t.game }}</span></td>
+                        <td>
+                            <small>{{ t.start_date }} <br> to {{ t.end_date }}</small>
+                        </td>
+                        <td class="text-success">
+                            <strong>${{ "{:,.2f}".format(t.prize_pool) }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ t.team_count }} teams</span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('leaderboard', tournament_id=t.tournament_id) }}" 
+                               class="btn btn-sm btn-primary">
+                                <i class="bi bi-trophy"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center my-3">No upcoming tournaments</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Completed Tournaments -->
+<div class="card shadow mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0"><i class="bi bi-check-circle"></i> Completed Tournaments</h5>
+    </div>
+    <div class="card-body">
+        {% if completed %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tournament Name</th>
+                        <th>Game</th>
+                        <th>Dates</th>
+                        <th>Prize Pool</th>
+                        <th>Teams</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in completed %}
+                    <tr>
+                        <td><strong>{{ t.name }}</strong></td>
+                        <td><span class="badge bg-secondary">{{ t.game }}</span></td>
+                        <td>
+                            <small>{{ t.start_date }} <br> to {{ t.end_date }}</small>
+                        </td>
+                        <td class="text-success">
+                            <strong>${{ "{:,.2f}".format(t.prize_pool) }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ t.team_count }} teams</span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('leaderboard', tournament_id=t.tournament_id) }}" 
+                               class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-trophy"></i> Final Standings
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center my-3">No completed tournaments</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

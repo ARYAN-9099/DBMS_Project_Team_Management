@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Matches - Esports Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-controller"></i> Matches</h2>
+    {% if session.user_id %}
+    <a href="{{ url_for('record_match') }}" class="btn btn-danger">
+        <i class="bi bi-plus-circle"></i> Record Match
+    </a>
+    {% endif %}
+</div>
+
+<!-- Upcoming Scheduled Matches -->
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Upcoming Matches</h5>
+    </div>
+    <div class="card-body">
+        {% if scheduled %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Match Time</th>
+                        <th>Tournament</th>
+                        <th>Game</th>
+                        <th>Team 1 vs Team 2</th>
+                        <th>Round</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in scheduled %}
+                    <tr>
+                        <td>
+                            <strong>{{ match.match_time.strftime('%Y-%m-%d') }}</strong>
+                            <br>
+                            <small class="text-muted">{{ match.match_time.strftime('%H:%M') }}</small>
+                        </td>
+                        <td>{{ match.tournament }}</td>
+                        <td>
+                            <span class="badge bg-secondary">{{ match.game }}</span>
+                        </td>
+                        <td>
+                            <strong>{{ match.team1 }}</strong> 
+                            <span class="text-muted">vs</span> 
+                            <strong>{{ match.team2 }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">Round {{ match.round_number }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center my-3">No upcoming scheduled matches</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Completed Matches -->
+<div class="card shadow">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-check-circle"></i> Recent Completed Matches</h5>
+    </div>
+    <div class="card-body">
+        {% if completed %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Tournament</th>
+                        <th>Game</th>
+                        <th>Team 1</th>
+                        <th>Score</th>
+                        <th>Team 2</th>
+                        <th>Winner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in completed %}
+                    <tr>
+                        <td>
+                            <strong>{{ match.match_time.strftime('%Y-%m-%d') }}</strong>
+                            <br>
+                            <small class="text-muted">{{ match.match_time.strftime('%H:%M') }}</small>
+                        </td>
+                        <td>
+                            <small>{{ match.tournament }}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">{{ match.game }}</span>
+                        </td>
+                        <td>
+                            <strong {% if match.winner == match.team1 %}class="text-success"{% endif %}>
+                                {{ match.team1 }}
+                            </strong>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-dark fs-6">
+                                {{ match.team1_score }} - {{ match.team2_score }}
+                            </span>
+                        </td>
+                        <td>
+                            <strong {% if match.winner == match.team2 %}class="text-success"{% endif %}>
+                                {{ match.team2 }}
+                            </strong>
+                        </td>
+                        <td>
+                            {% if match.winner %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-trophy"></i> {{ match.winner }}
+                            </span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark">Draw</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center my-3">No completed matches yet</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

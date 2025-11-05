@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Register Team - Esports Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-warning">
+                <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Register Team for Tournament</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('register_team') }}">
+                    <div class="mb-3">
+                        <label for="team_id" class="form-label">Select Team *</label>
+                        <select class="form-select" id="team_id" name="team_id" required>
+                            <option value="">-- Choose a team --</option>
+                            {% for team in teams %}
+                            <option value="{{ team.team_id }}">{{ team.team_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="form-text text-muted">Select the team to register</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="tournament_id" class="form-label">Select Tournament *</label>
+                        <select class="form-select" id="tournament_id" name="tournament_id" required>
+                            <option value="">-- Choose a tournament --</option>
+                            {% for tournament in tournaments %}
+                            <option value="{{ tournament.tournament_id }}">
+                                {{ tournament.name }} ({{ tournament.start_date }} to {{ tournament.end_date }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <small class="form-text text-muted">Only upcoming and ongoing tournaments are shown</small>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        <strong>Important:</strong> A team can only register once per tournament. 
+                        Duplicate registrations will be rejected.
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning btn-lg">
+                            <i class="bi bi-check-circle"></i> Register Team
+                        </button>
+                        <a href="{{ url_for('view_tournaments') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Tournaments
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
