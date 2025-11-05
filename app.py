@@ -29,22 +29,30 @@ from datetime import datetime
 from functools import wraps
 import os
 
+# Add dotenv loading
+from dotenv import load_dotenv
+
+# Load .env from project root (if present)
+load_dotenv()
+
 # ============================================================================
 # FLASK APPLICATION CONFIGURATION
 # ============================================================================
 
 app = Flask(__name__)
 
-# Secret key for session management (change this in production!)
-app.secret_key = 'your_secret_key_here_change_in_production'
+# Use environment variables (with safe defaults) instead of hardcoded values
+app.secret_key = os.getenv('SECRET_KEY', 'your_secret_key_here_change_in_production')
 
-# MySQL Database Configuration
-# IMPORTANT: Update these credentials to match your MySQL setup
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'  # Change to your MySQL username
-app.config['MYSQL_PASSWORD'] = 'kalaboka@1'  # Change to your MySQL password
-app.config['MYSQL_DB'] = 'esports_db'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'  # Return results as dictionaries
+# MySQL Database Configuration (read from environment)
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost')
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'root')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', '')
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB', 'esports_db')
+app.config['MYSQL_CURSORCLASS'] = os.getenv('MYSQL_CURSORCLASS', 'DictCursor')
+
+# Optional: store debug flag in config
+app.config['DEBUG'] = os.getenv('FLASK_DEBUG', 'False').lower() in ('1', 'true', 'yes')
 
 # Initialize MySQL connection
 mysql = MySQL(app)
@@ -1079,4 +1087,6 @@ if __name__ == '__main__':
     - Use a production WSGI server (gunicorn, uWSGI)
     - Set debug=False
     """
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Respect FLASK_DEBUG and PORT from environment
+    port = int(os.getenv('PORT', 5000))
+    app.run(debug=app.config.get('DEBUG', False), host='0.0.0.0', port=port)
