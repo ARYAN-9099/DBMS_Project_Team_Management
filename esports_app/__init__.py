@@ -30,6 +30,7 @@ def create_app():
 
     legacy_endpoint_map = {
         'index': 'main.index',
+        'er_diagram': 'main.er_diagram',
         'register_user': 'auth.register_user',
         'login': 'auth.login',
         'logout': 'auth.logout',

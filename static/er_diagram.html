@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER Diagram - Esports Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .diagram-container {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 40px;
+            overflow-x: auto;
+            overflow-y: auto;
+            position: relative;
+            max-height: 90vh;
+        }
+
+        svg {
+            display: block;
+            margin: 0 auto;
+            min-width: 1500px;
+        }
+
+        .entity {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .entity:hover {
+            filter: brightness(0.95);
+        }
+
+        .entity rect {
+            stroke-width: 2;
+        }
+
+        .primary-key {
+            fill: #fbbf24;
+        }
+
+        .foreign-key {
+            fill: #60a5fa;
+        }
+
+        .regular-attribute {
+            fill: #34d399;
+        }
+
+        .relationship-line {
+            stroke: #4b5563;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+
+        .relationship-label {
+            font-size: 12px;
+            fill: #1f2937;
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 2px solid #2d3748;
+        }
+
+        .info-panel {
+            background: #e0e7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-panel h3 {
+            color: #4c51bf;
+            margin-bottom: 10px;
+        }
+
+        .info-panel ul {
+            margin-left: 20px;
+            color: #2d3748;
+        }
+
+        .info-panel li {
+            margin: 5px 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Esports Management System</h1>
+        <p class="subtitle">Entity-Relationship Diagram</p>
+        
+        <!-- Back to Home Button -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="/" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); transition: all 0.3s ease;">
+                <i style="margin-right: 8px;">🏠</i> Back to Home
+            </a>
+        </div>
+
+        <div class="info-panel">
+            <h3>Database Overview</h3>
+            <ul>
+                <li><strong>8 Main Entities:</strong> users, teams, players, games, tournaments, registrations, matches, scores</li>
+                <li><strong>Key Relationships:</strong> Users create teams, Teams participate in tournaments, Matches determine winners</li>
+                <li><strong>Constraints:</strong> Foreign keys ensure referential integrity, Unique constraints prevent duplicates</li>
+                <li><strong>Note:</strong> Scroll horizontally/vertically to view the full diagram if needed</li>
+            </ul>
+        </div>
+
+        <div class="diagram-container">
+            <svg width="1500" height="1200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Define arrowhead marker for relationships -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#4b5563" />
+                    </marker>
+                </defs>
+
+                <!-- Relationship Lines (drawn first so they appear behind entities) -->
+                
+                <!-- users -> teams (captain_id) -->
+                <path class="relationship-line" d="M 280 150 L 400 150 L 400 250 L 520 250" />
+                <text class="relationship-label" x="360" y="145">captain_id</text>
+                <text class="relationship-label" x="360" y="160" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- users -> players (user_id) -->
+                <path class="relationship-line" d="M 180 280 L 180 450 L 280 450" />
+                <text class="relationship-label" x="190" y="370">user_id</text>
+                <text class="relationship-label" x="190" y="385" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- teams -> players (team_id) -->
+                <path class="relationship-line" d="M 620 340 L 620 450 L 540 450" />
+                <text class="relationship-label" x="630" y="390">team_id</text>
+                <text class="relationship-label" x="630" y="405" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- games -> tournaments (game_id) -->
+                <path class="relationship-line" d="M 1060 150 L 1200 150 L 1200 250 L 1320 250" />
+                <text class="relationship-label" x="1150" y="145">game_id</text>
+                <text class="relationship-label" x="1150" y="160" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- teams -> registrations (team_id) -->
+                <path class="relationship-line" d="M 620 340 L 620 600 L 780 600" />
+                <text class="relationship-label" x="630" y="470">team_id</text>
+                <text class="relationship-label" x="630" y="485" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- tournaments -> registrations (tournament_id) -->
+                <path class="relationship-line" d="M 1320 340 L 1150 340 L 1150 600 L 1040 600" />
+                <text class="relationship-label" x="1160" y="470">tournament_id</text>
+                <text class="relationship-label" x="1160" y="485" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- tournaments -> matches (tournament_id) -->
+                <path class="relationship-line" d="M 1420 340 L 1420 750 L 1040 750" />
+                <text class="relationship-label" x="1430" y="545">tournament_id</text>
+                <text class="relationship-label" x="1430" y="560" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- teams -> matches (team1_id) -->
+                <path class="relationship-line" d="M 720 340 L 720 680 L 780 680" />
+                <text class="relationship-label" x="730" y="510">team1_id</text>
+                <text class="relationship-label" x="730" y="525" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- teams -> matches (team2_id) -->
+                <path class="relationship-line" d="M 720 340 L 720 720 L 780 720" />
+                <text class="relationship-label" x="730" y="530">team2_id</text>
+                
+                <!-- teams -> matches (winner_id) -->
+                <path class="relationship-line" d="M 720 340 L 720 760 L 780 760" />
+                <text class="relationship-label" x="730" y="550">winner_id</text>
+
+                <!-- matches -> scores (match_id) -->
+                <path class="relationship-line" d="M 910 840 L 910 950 L 780 950" />
+                <text class="relationship-label" x="820" y="895">match_id</text>
+                <text class="relationship-label" x="820" y="910" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- teams -> scores (team_id) -->
+                <path class="relationship-line" d="M 620 340 L 620 950 L 650 950" />
+                <text class="relationship-label" x="630" y="645">team_id</text>
+                <text class="relationship-label" x="630" y="660" font-size="10" fill="#6b7280">1:N</text>
+
+                <!-- Entity: users -->
+                <g class="entity">
+                    <rect x="80" y="80" width="200" height="220" fill="#4f46e5" rx="5"/>
+                    <text x="180" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="16">USERS</text>
+                    <line x1="80" y1="115" x2="280" y2="115" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="90" y="125" width="180" height="22" class="primary-key" rx="3"/>
+                    <text x="100" y="141" font-size="12">🔑 user_id (PK)</text>
+                    
+                    <rect x="90" y="152" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="100" y="168" font-size="12">name</text>
+                    
+                    <rect x="90" y="179" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="100" y="195" font-size="12">email</text>
+                    
+                    <rect x="90" y="206" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="100" y="222" font-size="12">password</text>
+                    
+                    <rect x="90" y="233" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="100" y="249" font-size="12">role</text>
+                    
+                    <rect x="90" y="260" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="100" y="276" font-size="12">created_at</text>
+                </g>
+
+                <!-- Entity: teams -->
+                <g class="entity">
+                    <rect x="520" y="180" width="200" height="160" fill="#059669" rx="5"/>
+                    <text x="620" y="205" text-anchor="middle" fill="white" font-weight="bold" font-size="16">TEAMS</text>
+                    <line x1="520" y1="215" x2="720" y2="215" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="530" y="225" width="180" height="22" class="primary-key" rx="3"/>
+                    <text x="540" y="241" font-size="12">🔑 team_id (PK)</text>
+                    
+                    <rect x="530" y="252" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="540" y="268" font-size="12">team_name</text>
+                    
+                    <rect x="530" y="279" width="180" height="22" class="foreign-key" rx="3"/>
+                    <text x="540" y="295" font-size="12">🔗 captain_id (FK)</text>
+                    
+                    <rect x="530" y="306" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="540" y="322" font-size="12">created_at</text>
+                </g>
+
+                <!-- Entity: players -->
+                <g class="entity">
+                    <rect x="280" y="380" width="260" height="160" fill="#dc2626" rx="5"/>
+                    <text x="410" y="405" text-anchor="middle" fill="white" font-weight="bold" font-size="16">PLAYERS</text>
+                    <line x1="280" y1="415" x2="540" y2="415" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="290" y="425" width="240" height="22" class="primary-key" rx="3"/>
+                    <text x="300" y="441" font-size="12">🔑 player_id (PK)</text>
+                    
+                    <rect x="290" y="452" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="300" y="468" font-size="12">🔗 user_id (FK)</text>
+                    
+                    <rect x="290" y="479" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="300" y="495" font-size="12">🔗 team_id (FK)</text>
+                    
+                    <rect x="290" y="506" width="240" height="22" class="regular-attribute" rx="3"/>
+                    <text x="300" y="522" font-size="12">game_tag, joined_at</text>
+                </g>
+
+                <!-- Entity: games -->
+                <g class="entity">
+                    <rect x="860" y="80" width="200" height="160" fill="#ea580c" rx="5"/>
+                    <text x="960" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="16">GAMES</text>
+                    <line x1="860" y1="115" x2="1060" y2="115" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="870" y="125" width="180" height="22" class="primary-key" rx="3"/>
+                    <text x="880" y="141" font-size="12">🔑 game_id (PK)</text>
+                    
+                    <rect x="870" y="152" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="880" y="168" font-size="12">title</text>
+                    
+                    <rect x="870" y="179" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="880" y="195" font-size="12">genre</text>
+                    
+                    <rect x="870" y="206" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="880" y="222" font-size="12">created_at</text>
+                </g>
+
+                <!-- Entity: tournaments -->
+                <g class="entity">
+                    <rect x="1320" y="180" width="200" height="160" fill="#7c3aed" rx="5"/>
+                    <text x="1420" y="205" text-anchor="middle" fill="white" font-weight="bold" font-size="16">TOURNAMENTS</text>
+                    <line x1="1320" y1="215" x2="1520" y2="215" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="1330" y="225" width="180" height="22" class="primary-key" rx="3"/>
+                    <text x="1340" y="241" font-size="11">🔑 tournament_id (PK)</text>
+                    
+                    <rect x="1330" y="252" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="1340" y="268" font-size="12">name, dates</text>
+                    
+                    <rect x="1330" y="279" width="180" height="22" class="foreign-key" rx="3"/>
+                    <text x="1340" y="295" font-size="12">🔗 game_id (FK)</text>
+                    
+                    <rect x="1330" y="306" width="180" height="22" class="regular-attribute" rx="3"/>
+                    <text x="1340" y="322" font-size="11">prize_pool, status</text>
+                </g>
+
+                <!-- Entity: registrations -->
+                <g class="entity">
+                    <rect x="780" y="530" width="260" height="160" fill="#0891b2" rx="5"/>
+                    <text x="910" y="555" text-anchor="middle" fill="white" font-weight="bold" font-size="16">REGISTRATIONS</text>
+                    <line x1="780" y1="565" x2="1040" y2="565" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="790" y="575" width="240" height="22" class="primary-key" rx="3"/>
+                    <text x="800" y="591" font-size="12">🔑 reg_id (PK)</text>
+                    
+                    <rect x="790" y="602" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="800" y="618" font-size="12">🔗 team_id (FK)</text>
+                    
+                    <rect x="790" y="629" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="800" y="645" font-size="11">🔗 tournament_id (FK)</text>
+                    
+                    <rect x="790" y="656" width="240" height="22" class="regular-attribute" rx="3"/>
+                    <text x="800" y="672" font-size="12">reg_date, status</text>
+                </g>
+
+                <!-- Entity: matches -->
+                <g class="entity">
+                    <rect x="780" y="680" width="260" height="160" fill="#be123c" rx="5"/>
+                    <text x="910" y="705" text-anchor="middle" fill="white" font-weight="bold" font-size="16">MATCHES</text>
+                    <line x1="780" y1="715" x2="1040" y2="715" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="790" y="725" width="240" height="22" class="primary-key" rx="3"/>
+                    <text x="800" y="741" font-size="12">🔑 match_id (PK)</text>
+                    
+                    <rect x="790" y="752" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="800" y="768" font-size="11">🔗 tournament_id (FK)</text>
+                    
+                    <rect x="790" y="779" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="800" y="795" font-size="10">🔗 team1_id, team2_id (FK)</text>
+                    
+                    <rect x="790" y="806" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="800" y="822" font-size="12">🔗 winner_id (FK)</text>
+                </g>
+
+                <!-- Entity: scores -->
+                <g class="entity">
+                    <rect x="650" y="880" width="260" height="160" fill="#0d9488" rx="5"/>
+                    <text x="780" y="905" text-anchor="middle" fill="white" font-weight="bold" font-size="16">SCORES</text>
+                    <line x1="650" y1="915" x2="910" y2="915" stroke="white" stroke-width="1"/>
+                    
+                    <rect x="660" y="925" width="240" height="22" class="primary-key" rx="3"/>
+                    <text x="670" y="941" font-size="12">🔑 score_id (PK)</text>
+                    
+                    <rect x="660" y="952" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="670" y="968" font-size="12">🔗 match_id (FK)</text>
+                    
+                    <rect x="660" y="979" width="240" height="22" class="foreign-key" rx="3"/>
+                    <text x="670" y="995" font-size="12">🔗 team_id (FK)</text>
+                    
+                    <rect x="660" y="1006" width="240" height="22" class="regular-attribute" rx="3"/>
+                    <text x="670" y="1022" font-size="12">score</text>
+                </g>
+
+                <!-- Title at bottom -->
+                <text x="750" y="1150" text-anchor="middle" font-size="14" fill="#6b7280" font-style="italic">
+                    Database Design for Esports Competition Organization and Team Management System
+                </text>
+            </svg>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box primary-key"></div>
+                <span>Primary Key (PK)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box foreign-key"></div>
+                <span>Foreign Key (FK)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box regular-attribute"></div>
+                <span>Regular Attribute</span>
+            </div>
+            <div class="legend-item">
+                <div style="width: 40px; height: 2px; background: #4b5563;"></div>
+                <span>Relationship</span>
+            </div>
+        </div>
+
+        <div class="info-panel" style="margin-top: 30px;">
+            <h3>Key Relationships Explained</h3>
+            <ul>
+                <li><strong>users ↔ teams:</strong> One user can be captain of multiple teams (1:N via captain_id)</li>
+                <li><strong>users ↔ players:</strong> One user can have multiple player profiles (1:N via user_id)</li>
+                <li><strong>teams ↔ players:</strong> One team has multiple players (1:N via team_id)</li>
+                <li><strong>games ↔ tournaments:</strong> One game can have multiple tournaments (1:N via game_id)</li>
+                <li><strong>teams ↔ registrations:</strong> Teams register for tournaments (M:N bridged by registrations)</li>
+                <li><strong>tournaments ↔ registrations:</strong> Tournaments have many team registrations (1:N)</li>
+                <li><strong>tournaments ↔ matches:</strong> One tournament has multiple matches (1:N via tournament_id)</li>
+                <li><strong>teams ↔ matches:</strong> Teams participate in matches as team1, team2, or winner (1:N)</li>
+                <li><strong>matches ↔ scores:</strong> Each match has scores for participating teams (1:N via match_id)</li>
+                <li><strong>teams ↔ scores:</strong> Teams accumulate scores across multiple matches (1:N via team_id)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
