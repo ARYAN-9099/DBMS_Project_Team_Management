@@ -175,6 +175,9 @@ def team_details(team_id):
 
         cursor.callproc('get_team_statistics', [team_id])
         stats = cursor.fetchone()
+        
+        # Consume all result sets to avoid "Commands out of sync" error
+        cursor.nextset()
 
         cursor.execute("""
             SELECT t.tournament_id, t.name, g.title as game, t.start_date, t.end_date,

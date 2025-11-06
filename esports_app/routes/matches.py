@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from ..extensions import mysql
 from ..decorators import login_required
+from MySQLdb import ProgrammingError
 
 matches_bp = Blueprint('matches', __name__)
 
@@ -40,7 +41,12 @@ def record_match():
                 int(round_number)
             ])
 
+            # Fetch the result from the stored procedure
             result = cursor.fetchone()
+            
+            # Consume all result sets to avoid "Commands out of sync" error
+            cursor.nextset()
+            
             mysql.connection.commit()
             cursor.close()
 

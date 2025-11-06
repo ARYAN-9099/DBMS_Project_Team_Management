@@ -2,9 +2,6 @@
 -- ESPORTS COMPETITION ORGANIZATION AND TEAM MANAGEMENT SYSTEM
 -- Database Schema, Sample Data, Stored Procedures, Triggers, and Views
 -- ============================================================================
--- Author: College DBMS Project
--- Date: October 29, 2025
--- Database: MySQL
 -- ============================================================================
 
 -- Drop database if exists and create fresh
